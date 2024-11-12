@@ -1,55 +1,74 @@
-<!doctype html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>玉茹姐</title>  <!-- 设置网页标题 -->
-    <meta name="keywords" content="流星雨,HTML5,JavaScript" />  <!-- 设置关键词 -->
-    <meta name="description" content="使用HTML5和JavaScript实现流星雨效果" />  <!-- 设置描述信息 -->
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #000000;  /* 设置背景颜色为黑色 */
-            overflow: hidden;  /* 隐藏溢出部分 */
-        }
-        canvas {
-            display: block;  /* 设置画布为块级元素 */
-        }
-    </style>
+    <title>玉茹</title>  <!-- 设置网页标题 -->
 </head>
 <body>
-    <canvas style="background:#000000;" id="canvas"></canvas>  <!-- 创建画布 -->
-    <script>
-        var canvas = document.getElementById("canvas");  // 获取画布元素
-        var ctx = canvas.getContext("2d");  // 获取画布上下文
-        var s = window.screen;  // 获取屏幕信息
-        var w = s.width;  // 获取屏幕宽度
-        var h = s.height;  // 获取屏幕高度
-        canvas.width = w;  // 设置画布宽度为屏幕宽度
-        canvas.height = h;  // 设置画布高度为屏幕高度
-        var fontSize = 14;  // 设置字符大小
-        var clos = Math.floor(w / fontSize);  // 计算每行字符数
-        var drops = [];  // 存储水滴位置的数组
-        var str = "赵玉茹";  // 设置用于显示的字符集
-        for (var i = 0; i < clos; i++) {  // 初始化水滴位置数组
-            drops.push(0);
-        }
-        function drawString() {
-            ctx.fillStyle = "rgba(0,0,0,0.05)";  // 设置填充颜色
-            ctx.fillRect(0, 0, w, h);  // 用指定颜色填充整个画布
-            ctx.font = "600 " + (Math.random() * 15 + 10) + "px Arial";  // 设置字体样式和大小
-            ctx.fillStyle = "#00ff00";  // 设置字符颜色为绿色
-            for (var i = 0; i < clos; i++) {  // 遍历每一列
-                var x = i * fontSize;  // 计算字符的x坐标
-                var y = drops[i] * fontSize;  // 计算字符的y坐标
-                ctx.fillText(str[Math.floor(Math.random() * str.length)], x, y);  // 在指定位置绘制随机字符
-                if (y > h && Math.random() > 0.99) {  // 如果字符超出屏幕并且随机数大于0.99
-                    drops[i] = 0;  // 将该列的字符位置重置为0
-                }
-                drops[i]++;  // 增加字符位置，实现字符下落效果
-            }
-        }
-        setInterval(drawString, 30);  // 每隔30毫秒调用一次drawString函数，实现动画效果
-    </script>
+<canvas id="canvas" style="background:black" width="620" height="340"></canvas>
+<style type="text/css">
+body{margin: 0; padding: 0; overflow: hidden;}
+</style>
+<script type="text/javascript">
+	
+	window.onload = function(){
+		//获取图形对象
+		var canvas = document.getElementById("canvas");
+		//获取图形的上下文
+		var context = canvas.getContext("2d");
+		//获取浏览器屏幕的宽度和高度
+		var W = window.innerWidth;
+		var H = window.innerHeight;
+		//设置canvas的宽度和高度
+		canvas.width = W;
+		canvas.height = H;
+		//每个文字的字体大小
+		var fontSize = 25;
+		//计算列
+		var colunms = Math.floor(W /fontSize);	
+		//记录每列文字的y轴坐标
+		var drops = [];
+		//给每一个文字初始化一个起始点的位置
+		for(var i=0;i<colunms;i++){
+			drops.push(0);
+		}
+
+		//运动的文字
+		var str ="赵玉茹";
+		//4:fillText(str,x,y);原理就是去更改y的坐标位置
+		//绘画的函数
+		function draw(){
+		//让背景逐渐由透明到不透明
+			context.fillStyle = "rgba(0,0,0,0.05)";
+			context.fillRect(0,0,W,H);
+			//给字体设置样式
+			//context.font = "700 "+fontSize+"px  微软雅黑";
+			context.font = fontSize + 'px arial';
+			//给字体添加颜色
+			context.fillStyle =randColor();//随意更改字体颜色
+			//写入图形中
+			for(var i=0;i<colunms;i++){
+				var index = Math.floor(Math.random() * str.length);
+				var x = i*fontSize;
+				var y = drops[i] *fontSize;
+				context.fillText(str[index],x,y);
+				//如果要改变时间，肯定就是改变每次他的起点
+				if(y >= canvas.height && Math.random() > 0.92){
+					drops[i] = 0;
+				}
+				drops[i]++;
+			}
+		};
+
+		function randColor(){
+			var r = Math.floor(Math.random() * 256);
+			var g = Math.floor(Math.random() * 256);
+			var b = Math.floor(Math.random() * 256);
+			return "rgb("+r+","+g+","+b+")";
+		}
+
+		draw();
+		setInterval(draw,33);
+	};
+</script>
 </body>
 </html>
